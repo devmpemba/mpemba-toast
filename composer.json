@@ -17,8 +17,7 @@
             "SalimMbise\\ToastLibrary\\": "src/"
         }
     },
-     "minimum-stability": "stable",
-     
+    "minimum-stability": "stable",
     "scripts": {
         "post-install-cmd": [
             "SalimMbise\\ToastLibrary\\AssetManager::copyAssets"
