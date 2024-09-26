@@ -16,7 +16,7 @@ class ToastServiceProvider extends ServiceProvider
             }
         }
 
-        // Publish assets (if needed)
+        // Publish assets to the public directory
         $this->publishes([
             __DIR__.'/../../vendor/salimmbise/mpemba-toast/public/css' => public_path('vendor/mpemba-toast/css'),
             __DIR__.'/../../vendor/salimmbise/mpemba-toast/public/js' => public_path('vendor/mpemba-toast/js'),
