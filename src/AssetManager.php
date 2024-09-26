@@ -6,49 +6,35 @@ class AssetManager
 {
     public static function copyAssets()
     {
-        $sourceDir = __DIR__ . '/../assets';
-        $destinationDir = __DIR__ . '/../../public/vendor/mpemba-toast';
+        $publicDir = __DIR__ . '/../../public/vendor/mpemba-toast/';
+        $sourceDir = __DIR__ . '/../assets/';
 
-        if (!file_exists($destinationDir)) {
-            mkdir($destinationDir, 0777, true);
-        }
+        self::ensureDirectoryExists($publicDir);
 
         // Copy CSS files
-        self::copyDirectory("{$sourceDir}/css", "{$destinationDir}/css");
+        self::copyDirectory($sourceDir . 'css/', $publicDir . 'css/');
+
         // Copy JS files
-        self::copyDirectory("{$sourceDir}/js", "{$destinationDir}/js");
+        self::copyDirectory($sourceDir . 'js/', $publicDir . 'js/');
     }
 
-    private static function copyDirectory($source, $destination)
+    private static function ensureDirectoryExists($dir)
     {
-        // Ensure source directory exists
-        if (!is_dir($source)) {
-            return;
+        if (!file_exists($dir)) {
+            mkdir($dir, 0755, true);
         }
+    }
 
-        // Create destination directory if not exists
-        if (!file_exists($destination)) {
-            mkdir($destination, 0777, true);
-        }
-
-        // Open the source directory
-        $directoryIterator = new \DirectoryIterator($source);
-
-        foreach ($directoryIterator as $item) {
-            if ($item->isDot()) {
-                continue;
-            }
-
-            $sourcePath = $item->getPathname();
-            $relativePath = str_replace($source, '', $sourcePath);
-            $targetPath = $destination . DIRECTORY_SEPARATOR . ltrim($relativePath, DIRECTORY_SEPARATOR);
-
-            if ($item->isDir()) {
-                // Recursively copy directories
-                self::copyDirectory($sourcePath, $targetPath);
+    private static function copyDirectory($sourceDir, $destDir)
+    {
+        $files = glob($sourceDir . '*');
+        foreach ($files as $file) {
+            $dest = $destDir . basename($file);
+            if (is_dir($file)) {
+                self::ensureDirectoryExists($dest);
+                self::copyDirectory($file . '/', $dest . '/');
             } else {
-                // Copy files
-                copy($sourcePath, $targetPath);
+                copy($file, $dest);
             }
         }
     }
