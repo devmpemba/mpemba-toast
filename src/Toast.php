@@ -1,39 +1,62 @@
-<?
+<?php
+
 namespace SalimMbise\ToastLibrary;
 
 class Toast
 {
-    protected $messages = [];
+    protected $toasts = [];
 
-    public function __construct()
+    public function success($message, $duration = 3000)
     {
-        $this->loadAssets();
+        $this->addToast($message, 'success', $duration);
+        return $this;
     }
 
-    // Load CSS and JS for the toast notifications
-    private function loadAssets()
+    public function error($message, $duration = 3000)
     {
-        echo '<link rel="stylesheet" type="text/css" href="' . asset('vendor/mpemba-toast/css/toast.css') . '">';
-        echo '<script src="' . asset('vendor/mpemba-toast/js/toast.js') . '"></script>';
+        $this->addToast($message, 'error', $duration);
+        return $this;
     }
 
-    // Add a toast notification
-    public function addToast($message, $type = 'success', $duration = 3000)
+    public function warning($message, $duration = 3000)
     {
-        $this->messages[] = compact('message', 'type', 'duration');
+        $this->addToast($message, 'warning', $duration);
+        return $this;
     }
 
-    // Render the toast messages as inline script
+    public function info($message, $duration = 3000)
+    {
+        $this->addToast($message, 'info', $duration);
+        return $this;
+    }
+
+    private function addToast($message, $type, $duration)
+    {
+        $this->toasts[] = [
+            'message' => $message,
+            'type' => $type,
+            'duration' => $duration
+        ];
+    }
+
     public function renderToasts()
     {
         $scripts = '';
-        foreach ($this->messages as $toast) {
-            $scripts .= "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    showToast('{$toast['message']}', '{$toast['type']}', {$toast['duration']});
-                });
-            </script>";
+
+        foreach ($this->toasts as $toast) {
+            $message = addslashes($toast['message']);
+            $type = $toast['type'];
+            $duration = $toast['duration'];
+
+            $scripts .= "
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        showToast('$message', '$type', $duration);
+                    });
+                </script>
+            ";
         }
-        echo $scripts;
+
+        return $scripts;
     }
 }
