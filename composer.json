@@ -10,9 +10,13 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
-        "illuminate/support": "^8.0 || ^9.0"
+      
     },
+
+    "require-dev": { 
+        "phpunit/phpunit": "^9.0"
+    },
+
     "autoload": {
         "psr-4": {
             "SalimMbise\\ToastLibrary\\": "src/"
@@ -25,7 +29,7 @@
             ]
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "scripts": {
         "post-install-cmd": [
             "@php artisan vendor:publish --tag=toast-assets"
@@ -35,5 +39,5 @@
         ]
     },
 
-    "version": "3.4.0"
+    "version": "4.0.0"
 }
