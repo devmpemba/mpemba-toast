@@ -1,0 +1,28 @@
+{
+    "name": "salimmbise/mpemba-toast",
+    "description": "A simple PHP toast notification library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Salim Mbise",
+            "email": "salymdev@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "SalimMbise\\ToastLibrary\\": "src/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "SalimMbise\\ToastLibrary\\AssetManager::copyAssets"
+        ],
+        "post-update-cmd": [
+            "SalimMbise\\ToastLibrary\\AssetManager::copyAssets"
+        ]
+    }
+}
