@@ -1,9 +1,10 @@
-<?php
-
+<?
 namespace SalimMbise\ToastLibrary;
 
 class Toast
 {
+    protected $messages = [];
+
     public function __construct()
     {
         $this->loadAssets();
@@ -12,24 +13,27 @@ class Toast
     // Load CSS and JS for the toast notifications
     private function loadAssets()
     {
-        echo '<link rel="stylesheet" type="text/css" href="/assets/css/toast.css">';
-        echo '<script src="/assets/js/toast.js"></script>';
-    }
-    
-
-    // Generate the toast container where notifications will appear
-    public function renderToastContainer()
-    {
-        echo '<div class="toast-container"></div>';
+        echo '<link rel="stylesheet" type="text/css" href="' . asset('vendor/mpemba-toast/css/toast.css') . '">';
+        echo '<script src="' . asset('vendor/mpemba-toast/js/toast.js') . '"></script>';
     }
 
-    // Add a toast notification to the page
+    // Add a toast notification
     public function addToast($message, $type = 'success', $duration = 3000)
     {
-        echo "<script>
+        $this->messages[] = compact('message', 'type', 'duration');
+    }
+
+    // Render the toast messages as inline script
+    public function renderToasts()
+    {
+        $scripts = '';
+        foreach ($this->messages as $toast) {
+            $scripts .= "<script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    showToast('$message', '$type', $duration);
+                    showToast('{$toast['message']}', '{$toast['type']}', {$toast['duration']});
                 });
-              </script>";
+            </script>";
+        }
+        echo $scripts;
     }
 }
